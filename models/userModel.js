@@ -9,3 +9,11 @@ export async function insertUser(email, passwordHashed) {
     }
 }
 
+export async function getAllUsers(){
+    try{
+        await pool.query("SELECT * FROM users")
+    }
+    catch(err){
+        console.error(err)
+    }
+}
