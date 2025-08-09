@@ -2,7 +2,8 @@ import {pool} from "../config/db.js"
 
 export async function insertUser(email, passwordHashed) {
     try{
-        await pool.query("INSERT INTO users (email,password) VALUES($1,$2)", [email, passwordHashed])
+        const result = await pool.query("INSERT INTO users (email,password) VALUES($1,$2) RETURNING *", [email, passwordHashed])
+        return result.rows[0]
     }
     catch(err){
         console.error(err)
@@ -11,9 +12,19 @@ export async function insertUser(email, passwordHashed) {
 
 export async function getAllUsers(){
     try{
-        await pool.query("SELECT * FROM users")
+        const result = await pool.query("SELECT * FROM users")
+        return result.rows
     }
     catch(err){
+        console.error(err)
+    }
+}
+
+export async function  getUser(email) {
+    try{
+        const result = await pool.query("SELECT * FROM users WHERE email = 1$",[email])
+        return result.rows[0]
+    }catch(err){
         console.error(err)
     }
 }
