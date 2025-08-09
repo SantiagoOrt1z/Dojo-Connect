@@ -28,3 +28,12 @@ export async function  getUser(email) {
         console.error(err)
     }
 }
+
+export async function deleteUser(email) {
+    try{
+        await pool.query("DELETE FROM users WHERE $1",[email])
+    }catch(err){
+        console.error(err)
+    }
+    
+}
