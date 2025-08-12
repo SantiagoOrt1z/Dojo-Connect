@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt"
-import { insertUser } from "../models/userModel"
+import { insertUser } from "../models/userModel.js"
 
 export async function createUser(email, password) {
     try{
