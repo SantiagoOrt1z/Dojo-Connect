@@ -23,7 +23,17 @@ export async function getAllUsers() {
     }
 }
 
-export async function getUser(email) {
+export async function getUserById(id){
+    try{
+        const result = await pool.query("SELECT * FROM users WHERE id = $1",id)
+       return result.rows[0]
+    }catch(err){
+        console.error(err)
+        throw err
+    }
+}
+
+export async function getUserByEmail(email) {
     try {
         const result = await pool.query(
             "SELECT * FROM users WHERE email = $1",
@@ -43,4 +53,16 @@ export async function deleteUser(email) {
         console.error(err);
         throw err;
     }
+}
+
+export async function updateUser(id,email,passwordHashed) {
+    try {
+        const result = await pool.query("UPDATE users SET email = $1, password = $2 WHERE id = $3 RETURNING *", [email,passwordHashed,id]);
+        const user = result.rows[0]
+        return user
+    } catch (err) {
+        console.error(err);
+        throw err;
+    }
+    
 }
