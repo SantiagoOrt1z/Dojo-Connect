@@ -13,20 +13,14 @@ export async function insertUser(email, passwordHashed) {
     }
 }
 
-export async function getAllUsers() {
-    try {
-        const result = await pool.query("SELECT * FROM users");
-        return result.rows;
-    } catch (err) {
-        console.error(err);
-        throw err;
-    }
-}
-
 export async function getUserById(id){
     try{
-        const result = await pool.query("SELECT * FROM users WHERE id = $1",id)
-       return result.rows[0]
+        const result = await pool.query("SELECT * FROM users WHERE id = $1",[id])
+        if(result.rows.length > 0){
+            return result.rows[0]
+        }else{
+            return false
+        }       
     }catch(err){
         console.error(err)
         throw err
@@ -39,16 +33,21 @@ export async function getUserByEmail(email) {
             "SELECT * FROM users WHERE email = $1",
             [email]
         );
-        return result.rows[0];
+        if(result.rows.length > 0){
+            return result.rows[0];
+        }else{
+            return false
+        }
     } catch (err) {
         console.error(err);
         throw err;
     }
 }
 
-export async function deleteUser(email) {
+export async function deleteUserByEmail(email) {
     try {
         await pool.query("DELETE FROM users WHERE email = $1", [email]);
+        return true
     } catch (err) {
         console.error(err);
         throw err;

@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt"
-import { insertUser, updateUser, getUserById } from "../models/userModel.js"
+import { insertUser, updateUser, getUserById, getUserByEmail } from "../models/userModel.js"
 
 export async function createUser(email, password) {
     try{
@@ -28,5 +28,22 @@ export async function updateDataUser(id,email, password) {
     } catch (err) {
         console.error(err);
         throw err;
+    }
+}
+export async function userCompare(email,password) {
+    try{
+        const user = await getUserByEmail(email)
+        if(user){
+            const match = await bcrypt.compare(password, user.password)
+            if(!match){
+                return false
+            }else{
+                return true
+            }
+        }else{
+            return false
+        }
+    }catch(err){
+        console.error(err)
     }
 }
