@@ -3,6 +3,7 @@ import env from "dotenv"
 import session from "express-session";
 import userRoutes from "./routes/userRoutes.js"
 import postRoutes from "./routes/postRoutes.js"
+import userMartialArtsRoutes from "./routes/userMartialArtsRoutes.js"
 
 env.config()
 
@@ -23,5 +24,6 @@ app.use(express.urlencoded({extended:true}))
 
 app.use("/user",userRoutes)
 app.use("/post",postRoutes)
+app.use("/user/martial-arts",userMartialArtsRoutes)
 
 export default app
