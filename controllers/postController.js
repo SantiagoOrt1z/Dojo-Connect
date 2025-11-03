@@ -1,8 +1,9 @@
-import { insertPost, getAllPosts, getPostById, getUserPosts,updatePost,deletePost, deletePostById } from "../models/postModel.js";
+import { insertPost, getAllPosts, getPostById, getUserPosts,updatePost, deletePostById } from "../models/postModel.js";
 
 export async function addPost(req,res) {
     try{
-        const {content, userID} = req.body  
+        const userID = req.session.user.id
+        const {content} = req.body  
 
         const result = await insertPost(content, userID)
         res.status(201).json(result)
@@ -32,7 +33,7 @@ export async function postId(req,res) {
 
 export async function userPosts(req,res) {
     try{
-        const userId = req.params.id
+        const userId = req.session.user.id
         const result = await getUserPosts(userId)
         res.status(200).json(result)
     }catch(err){
