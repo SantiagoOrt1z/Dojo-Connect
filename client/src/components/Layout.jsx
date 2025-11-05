@@ -6,6 +6,15 @@ import ProfileSideBar from "./ProfileSideBar.jsx";
 import "./styles/Layout.css";
 
 const Layout = () => {
+  const user = {
+    name: "Santiago Ortiz",
+    username: "santiago",
+    avatar: "/default-avatar.png",
+    posts: 12,
+    followers: 150,
+    following: 80,
+    bio: "Amante del Jiu Jitsu y la programación.",
+  };
   return (
     <div className="layout-container">
       <Header />
@@ -14,7 +23,7 @@ const Layout = () => {
           <PostFeed />
         </div>
         <aside className="sidebar-section">
-          <ProfileSideBar />
+          <ProfileSideBar user={user} />
         </aside>
       </main>
       <Footer />
