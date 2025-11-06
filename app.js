@@ -4,6 +4,7 @@ import session from "express-session";
 import userRoutes from "./routes/userRoutes.js"
 import postRoutes from "./routes/postRoutes.js"
 import postExtraRoutes from "./routes/postExtraRoutes.js";
+import userFollowRoutes from "./routes/userFollowRoutes.js"
 
 env.config()
 
@@ -25,5 +26,6 @@ app.use(express.urlencoded({extended:true}))
 app.use("/user",userRoutes)
 app.use("/post",postRoutes)
 app.use("/posts", postExtraRoutes);
+app.use("/follows", userFollowRoutes)
 
 export default app
