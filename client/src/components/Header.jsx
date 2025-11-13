@@ -6,36 +6,52 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import "./styles/Header.css";
 
 function Header() {
+  const user = {
+    name: "Santiago Ortiz",
+    avatar: "/dojo-connect.png",
+  };
+
   return (
-    <Navbar expand="lg" className="nav-bar-1">
+    <Navbar expand="lg" className="nav-bar-1 shadow-sm px-3">
       <Container fluid>
         <Navbar.Brand href="#">
-          <img src="dojo-connect.png" alt="Imagen de icono" height="40" />
+          <img
+            src="dojo-connect.png"
+            alt="Dojo Connect"
+            height="40"
+            className="me-2"
+          />
         </Navbar.Brand>
+
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
-          <Nav
-            className="me-auto my-2 my-lg-0"
-            style={{ maxHeight: "100px" }}
-            navbarScroll
-          >
-            <Nav.Link href="#action1">Inicio</Nav.Link>
+          <Nav className="me-auto">
+            <Nav.Link href="#inicio">Inicio</Nav.Link>
           </Nav>
 
           <Nav className="ms-auto">
             <NavDropdown
-              title="Mi user"
+              align="end"
+              title={
+                <span className="d-flex align-items-center">
+                  <img
+                    src={user.avatar}
+                    alt="avatar"
+                    width="30"
+                    height="30"
+                    className="rounded-circle me-2"
+                  />
+                  <span className="user-name">{user.name}</span>
+                </span>
+              }
               id="navbarScrollingDropdown"
-              align={"end"}
             >
-              <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action4">
-                Another action
+              <NavDropdown.Item href="#perfil">Mi perfil</NavDropdown.Item>
+              <NavDropdown.Item href="#configuracion">
+                Configuración
               </NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#action5">
-                Something else here
-              </NavDropdown.Item>
+              <NavDropdown.Item href="#logout">Cerrar sesión</NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>

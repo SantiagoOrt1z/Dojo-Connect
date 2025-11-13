@@ -9,7 +9,7 @@ const ProfileSidebar = ({ user }) => {
     <Card className="profile-sidebar shadow-sm">
       <Card.Body className="text-center">
         <Image
-          src={user.avatar || "/default-avatar.png"}
+          src={user.avatar || "./dojo-connect.png"}
           roundedCircle
           className="profile-avatar mb-3"
         />
@@ -39,6 +39,23 @@ const ProfileSidebar = ({ user }) => {
         <Card.Text className="text-muted small">
           {user.bio || "Este usuario aún no escribió una biografía."}
         </Card.Text>
+      </Card.Body>
+
+      <Card.Body>
+        <Card.Title className="h6">Artes marciales</Card.Title>
+        {user.martialArts?.length > 0 ? (
+          <ul className="list-unstyled text-muted small">
+            {user.martialArts.map((art, index) => (
+              <li key={index}>
+                🥋 {art.name} {art.level ? `(${art.level})` : ""}
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <Card.Text className="text-muted small">
+            Este usuario aún no añadió sus artes marciales.
+          </Card.Text>
+        )}
       </Card.Body>
     </Card>
   );

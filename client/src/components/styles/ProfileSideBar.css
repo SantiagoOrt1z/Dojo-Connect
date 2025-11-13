@@ -1,21 +1,112 @@
 .profile-sidebar {
-  max-width: 280px;
-  margin: 1rem auto;
+  background-color: #fff;
   border-radius: 16px;
+  overflow: hidden;
+  margin-top: 1rem;
+  transition: box-shadow 0.3s ease;
+}
+
+.profile-sidebar:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .profile-avatar {
-  width: 90px;
-  height: 90px;
+  width: 100px;
+  height: 100px;
   object-fit: cover;
-  border: 2px solid #ddd;
+  border: 3px solid #f1f1f1;
+}
+
+.card-title {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.card-subtitle {
+  color: #777 !important;
+  font-size: 0.9rem;
+}
+
+.list-group {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  background-color: #fafafa;
 }
 
 .list-group-item {
-  border: none;
-  padding: 0.75rem 1rem;
+  border: none !important;
+  flex: 1;
+  padding: 0.75rem 0;
+  background-color: transparent;
 }
 
-.list-group-item:not(:last-child) {
-  border-bottom: 1px solid #eee;
+.list-group-item strong {
+  display: block;
+  font-size: 1rem;
+  color: #1a1a2e;
+}
+
+.list-group-item .text-muted {
+  font-size: 0.8rem;
+}
+
+.card-body:last-child {
+  padding-top: 0.75rem;
+}
+
+.card-body:last-child .card-title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.card-body:last-child .card-text {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.4;
+}
+
+/* 🔹 Responsive: Sidebar debajo del feed */
+@media (max-width: 992px) {
+  .profile-sidebar {
+    max-width: 500px;
+    margin: 1.5rem auto;
+  }
+
+  .list-group {
+    flex-direction: row;
+  }
+
+  .list-group-item {
+    padding: 0.5rem 0;
+  }
+
+  .card-body {
+    text-align: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .profile-avatar {
+    width: 80px;
+    height: 80px;
+  }
+
+  .card-title {
+    font-size: 1rem;
+  }
+
+  .card-subtitle {
+    font-size: 0.8rem;
+  }
+
+  .list-group-item strong {
+    font-size: 0.9rem;
+  }
+
+  .list-group-item .text-muted {
+    font-size: 0.75rem;
+  }
 }

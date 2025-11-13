@@ -9,7 +9,7 @@ const Layout = () => {
   const user = {
     name: "Santiago Ortiz",
     username: "santiago",
-    avatar: "/default-avatar.png",
+    avatar: "/dojo-connect.png",
     posts: 12,
     followers: 150,
     following: 80,

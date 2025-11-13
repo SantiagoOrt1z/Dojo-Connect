@@ -52,3 +52,57 @@
   background-color: #6c757d;
   color: #fff;
 }
+
+.like-count {
+  font-size: 14px;
+  color: #444;
+  font-weight: 500;
+}
+
+/* Animaciones del like */
+.like-btn {
+  transition: 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.like-icon {
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.liked .like-icon {
+  transform: scale(1.3);
+  color: white;
+}
+
+/* Caja de comentario */
+.comment-box {
+  width: 100%;
+  min-height: 70px;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  resize: none;
+  font-size: 14px;
+}
+
+/* efecto bump */
+@keyframes bump {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.3);
+  }
+  60% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.like-count.bump {
+  animation: bump 0.3s ease-out;
+}
