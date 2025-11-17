@@ -64,3 +64,17 @@ export async function loginUser(req,res) {
         throw err
     }
 }
+
+export function getSessionUser(req, res) {
+  if (req.session.user) {
+    return res.status(200).json(req.session.user);
+  }
+  return res.status(401).json({ message: "No hay sesión activa" });
+}
+
+export function logoutUser(req, res) {
+  req.session.destroy(() => {
+    res.clearCookie("connect.sid");
+    res.status(200).json({ message: "Sesión cerrada" });
+  });
+}
