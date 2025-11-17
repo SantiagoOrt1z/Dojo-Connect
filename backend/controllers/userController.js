@@ -22,7 +22,7 @@ export async function registerUser(req, res) {
 
 export async function editUser(req,res) {
     try{
-        const id = req.params.id
+        const id = req.session.user.id
         const { email, password} = req.body
        const result = await updateDataUser(id,email,password)
        res.status(200).json(result)
@@ -36,7 +36,7 @@ export async function editUser(req,res) {
 
 export async function deleteUser(req,res) {
     try{
-        const {id}= req.params
+        const id= req.session.user
         const user = await getUserById(id)
        await deleteUserByEmail(user.email)
        res.status(200).json({message:"Usuario eliminado correctamente"})
