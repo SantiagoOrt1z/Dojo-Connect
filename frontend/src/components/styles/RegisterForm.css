@@ -1,0 +1,26 @@
+.register-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1e1e2f, #343454);
+}
+
+.register-card {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 1rem;
+  background-color: #f9f9f9;
+}
+
+.register-card h2 {
+  font-weight: 600;
+  color: #333;
+}
+
+.register-card a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.register-card a:hover {
+  text-decoration: underline;
+}

@@ -3,10 +3,11 @@ import Header from "./Header.jsx";
 import Footer from "./Footer.jsx";
 import PostFeed from "./PostFeed.jsx";
 import ProfileSideBar from "./ProfileSideBar.jsx";
+import LoginForm from "./LoginForm.jsx";
 import "./styles/Layout.css";
 
 const Layout = () => {
-  const user = {
+  /* const user = {
     name: "Santiago Ortiz",
     username: "santiago",
     avatar: "/dojo-connect.png",
@@ -27,7 +28,12 @@ const Layout = () => {
         </aside>
       </main>
       <Footer />
-    </div>
+    </div> */
+
+  return (
+    <>
+      <LoginForm />;
+    </>
   );
 };
 
