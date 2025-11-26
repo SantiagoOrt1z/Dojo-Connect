@@ -1,24 +1,25 @@
 import React from "react";
-import Header from "./Header.jsx";
 import Footer from "./Footer.jsx";
 import PostFeed from "./PostFeed.jsx";
 import ProfileSideBar from "./ProfileSideBar.jsx";
-import LoginForm from "./LoginForm.jsx";
+import Header from "./Header.jsx";
 import "./styles/Layout.css";
 
-const Layout = () => {
-  /* const user = {
+const Layout = ({ onLogout }) => {
+  const [user, setUser] = React.useState({});
+
+  /*const user = {
     name: "Santiago Ortiz",
     username: "santiago",
     avatar: "/dojo-connect.png",
     posts: 12,
-    followers: 150,
+    followers: 150,S
     following: 80,
     bio: "Amante del Jiu Jitsu y la programación.",
-  };
+  };*/
   return (
     <div className="layout-container">
-      <Header />
+      <Header onLogout={onLogout} />
       <main className="main-content">
         <div className="feed-section">
           <PostFeed />
@@ -28,12 +29,7 @@ const Layout = () => {
         </aside>
       </main>
       <Footer />
-    </div> */
-
-  return (
-    <>
-      <LoginForm />;
-    </>
+    </div>
   );
 };
 

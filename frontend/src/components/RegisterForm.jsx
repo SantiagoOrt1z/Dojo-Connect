@@ -1,8 +1,10 @@
 import { Form, Button, Card, Container } from "react-bootstrap";
 import "./styles/RegisterForm.css";
 import { useState } from "react";
+import { register } from "../services/api";
+import { Link } from "react-router-dom";
 
-const RegisterForm = () => {
+const RegisterForm = (props) => {
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -15,17 +17,23 @@ const RegisterForm = () => {
     });
   };
 
-  const registerUser = (e) => {
+  const registerUser = async (e) => {
     e.preventDefault();
-    console.log("Datos a enviar:", user);
+    try {
+      const response = await register(user.email, user.password);
+      console.log("Registro exitoso:", response.data);
+      props.onSesionSuccess();
+    } catch (error) {
+      console.error("Error en registro:", error);
+    }
   };
 
   return (
     <Container className="register-container d-flex align-items-center justify-content-center">
       <Card className="register-card p-4 shadow-sm">
         <Card.Body>
-          <h2 className="text-center mb-4">Iniciar sesión</h2>
-          <Form onSubmit={loginUser}>
+          <h2 className="text-center mb-4">Registrarse</h2>
+          <Form onSubmit={registerUser}>
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Correo electrónico</Form.Label>
               <Form.Control
@@ -54,7 +62,12 @@ const RegisterForm = () => {
 
             <div className="text-center mt-3">
               <span>¿Tenés cuenta? </span>
-              <a href="#">Inicia Sesion</a>
+              <Link
+                to="/login"
+                className="text-decoration-none text-primary fw-bold"
+              >
+                Iniciar Sesion
+              </Link>
             </div>
           </Form>
         </Card.Body>

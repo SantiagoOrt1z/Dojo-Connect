@@ -36,3 +36,8 @@
 .navbar .dropdown-item:hover {
   background-color: #f8f9fa;
 }
+
+.link{
+  text-decoration: none;
+  color: white;
+}

@@ -2,8 +2,9 @@ import { Form, Button, Card, Container } from "react-bootstrap";
 import "./styles/LoginForm.css";
 import { useState } from "react";
 import { login } from "../services/api";
+import { Link } from "react-router-dom";
 
-const LoginForm = () => {
+const LoginForm = (props) => {
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -21,7 +22,7 @@ const LoginForm = () => {
 
     try {
       const response = await login(user.email, user.password);
-      console.log("Login exitoso:", response.data);
+      props.onSesionSuccess();
     } catch (error) {
       console.error("Error en login:", error);
     }
@@ -61,7 +62,12 @@ const LoginForm = () => {
 
             <div className="text-center mt-3">
               <span>¿No tenés cuenta? </span>
-              <a href="#">Registrate</a>
+              <Link
+                to="/register"
+                className="text-decoration-none text-primary fw-bold"
+              >
+                Registrate
+              </Link>
             </div>
           </Form>
         </Card.Body>

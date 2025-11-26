@@ -4,17 +4,30 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import "./styles/Header.css";
+import { Link, useNavigate } from "react-router-dom";
+import { logout } from "../services/api.js";
 
-function Header() {
+function Header({ onLogout }) {
+  const navigate = useNavigate();
   const user = {
     name: "Santiago Ortiz",
     avatar: "/dojo-connect.png",
   };
 
+  const handleLogout = async () => {
+    try {
+      await logout();
+      onLogout();
+      navigate("/login");
+    } catch (error) {
+      console.error("Error en logout", error);
+    }
+  };
+
   return (
     <Navbar expand="lg" className="nav-bar-1 shadow-sm px-3">
       <Container fluid>
-        <Navbar.Brand href="#">
+        <Navbar.Brand>
           <img
             src="dojo-connect.png"
             alt="Dojo Connect"
@@ -26,7 +39,9 @@ function Header() {
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav className="me-auto">
-            <Nav.Link href="#inicio">Inicio</Nav.Link>
+            <Link to={"/"} className="link">
+              Inicio
+            </Link>
           </Nav>
 
           <Nav className="ms-auto">
@@ -46,12 +61,14 @@ function Header() {
               }
               id="navbarScrollingDropdown"
             >
-              <NavDropdown.Item href="#perfil">Mi perfil</NavDropdown.Item>
-              <NavDropdown.Item href="#configuracion">
-                Configuración
+              <NavDropdown.Item as={Link} to={"/profile"}>
+                Mi perfil
               </NavDropdown.Item>
+
               <NavDropdown.Divider />
-              <NavDropdown.Item href="#logout">Cerrar sesión</NavDropdown.Item>
+              <NavDropdown.Item onClick={handleLogout}>
+                Cerrar sesión
+              </NavDropdown.Item>
             </NavDropdown>
           </Nav>
         </Navbar.Collapse>

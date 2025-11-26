@@ -1,6 +1,33 @@
 .login-container {
   min-height: 100vh;
+  min-width: 100%;
+  position: relative;
+}
+
+.login-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('/f.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.3;
+  z-index: -1;
+}
+
+.login-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   background: linear-gradient(135deg, #1e1e2f, #343454);
+  opacity: 0.8;
+  z-index: -1;
 }
 
 .login-card {
