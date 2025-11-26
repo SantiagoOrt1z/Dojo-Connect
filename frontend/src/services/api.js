@@ -10,8 +10,8 @@ const API = axios.create({
 
     //USER
 
-export  function register(email, password) {
-  return API.post("/user/register", {email,password})
+export  function register(email, password, name, username,bio) {
+  return API.post("/user/register", {email,password,name,username,bio})
 }
 
 export function login(email,password){
@@ -32,4 +32,8 @@ export function editInfoUser(email,password){
 
 export function deleteUser(){
   return API.delete("/user/")
+}
+
+export function getPosts() {
+  return API.get("/post/all");
 }

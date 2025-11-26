@@ -8,6 +8,9 @@ const RegisterForm = (props) => {
   const [user, setUser] = useState({
     email: "",
     password: "",
+    name: "",
+    username: "",
+    bio: "",
   });
 
   const handleChange = (e) => {
@@ -20,7 +23,13 @@ const RegisterForm = (props) => {
   const registerUser = async (e) => {
     e.preventDefault();
     try {
-      const response = await register(user.email, user.password);
+      const response = await register(
+        user.email,
+        user.password,
+        user.name,
+        user.username,
+        user.bio
+      );
       console.log("Registro exitoso:", response.data);
       props.onSesionSuccess();
     } catch (error) {
@@ -51,6 +60,28 @@ const RegisterForm = (props) => {
                 name="password"
                 type="password"
                 value={user.password}
+                onChange={handleChange}
+                placeholder="Ingresa tu contraseña"
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>Nombre</Form.Label>
+              <Form.Control
+                name="name"
+                type="text"
+                value={user.name}
+                onChange={handleChange}
+                placeholder="Ingresa tu contraseña"
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="formBasicPassword">
+              <Form.Label>Nombre de usuario</Form.Label>
+              <Form.Control
+                name="username"
+                type="text"
+                value={user.username}
                 onChange={handleChange}
                 placeholder="Ingresa tu contraseña"
               />

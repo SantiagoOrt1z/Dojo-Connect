@@ -27,7 +27,7 @@ const PostCard = ({ user, content, imageUrl, initialLikes = 0 }) => {
     <Card className="mb-3 shadow-sm post-card">
       <Card.Header className="d-flex align-items-center">
         <img
-          src="dojo-connect.png"
+          src={"dojo-connect.png"}
           alt="avatar"
           className="rounded-circle me-2"
           height="40"
@@ -51,7 +51,6 @@ const PostCard = ({ user, content, imageUrl, initialLikes = 0 }) => {
             <GiPunch className="like-icon" /> Oss
           </Button>
 
-          {/* Mostramos contador */}
           <span className={`like-count ${bump ? "bump" : ""}`}>
             {likes} Oss
           </span>
