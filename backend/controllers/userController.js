@@ -3,7 +3,7 @@ import { deleteUserByEmail, getUserByEmail, getUserById } from "../models/userMo
 
 export async function registerUser(req, res) {
     try {
-        const { email, password } = req.body;
+        const { email, password, name, username, bio } = req.body;
 
         const checkResult = await getUserByEmail(email)
 
@@ -23,7 +23,7 @@ export async function registerUser(req, res) {
 export async function editUser(req,res) {
     try{
         const id = req.session.user.id
-        const { email, password} = req.body
+        const { email, password, name, username, bio} = req.body
        const result = await updateDataUser(id,email,password)
        res.status(200).json(result)
     }catch(err){

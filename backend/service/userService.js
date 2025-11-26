@@ -1,21 +1,25 @@
 import bcrypt from "bcrypt"
 import { insertUser, updateUser, getUserById, getUserByEmail } from "../models/userModel.js"
 
-export async function createUser(email, password) {
+export async function createUser(email, password, name, username, bio) {
     try{
-        const passwordHashed = await bcrypt.hash(password, 10)
-        return insertUser(email, passwordHashed)
+        const passwordHashed = await bcrypt.hash(password, 10);
+        return insertUser(email, passwordHashed, name, username, bio);
     }catch(err){
-        console.error(err)
+        console.error(err);
+        throw err;
     }   
 }
 
-export async function updateDataUser(id,email, password) {
+export async function updateDataUser(id, email, password, name, username, bio) {
     try {
         const currentUser = await getUserById(id);
 
         let newEmail = email || currentUser.email;
         let newPassword = currentUser.password; 
+        let newName = name || currentUser.name;
+        let newUsername = username || currentUser.username;
+        let newBio = bio || currentUser.bio;
 
         if (password) {
             const isSamePassword = await bcrypt.compare(password, currentUser.password);
@@ -24,7 +28,7 @@ export async function updateDataUser(id,email, password) {
             }
         }
 
-        return await updateUser(id, newEmail, newPassword);
+        return await updateUser(id, newEmail, newPassword, newName, newUsername, newBio);
     } catch (err) {
         console.error(err);
         throw err;

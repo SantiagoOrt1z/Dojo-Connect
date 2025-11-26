@@ -12,11 +12,24 @@ export async function insertPost(content, userId) {
 
 export async function getAllPosts() {
     try{
-        const result = await pool.query("SELECT * from posts")
-        return result.rows
-    }catch(err){
-        console.error(err)
-        throw err
+        const query = `
+            SELECT 
+                p.*,
+                u.name as user_name,
+                u.username,
+                u.avatar_url,
+                (SELECT COUNT(*) FROM post_likes WHERE post_id = p.id) as likes_count,
+                (SELECT COUNT(*) FROM comments WHERE post_id = p.id) as comments_count,
+                (SELECT image_url FROM post_images WHERE post_id = p.id LIMIT 1) as post_image
+            FROM posts p 
+            JOIN users u ON p.user_id = u.id 
+            ORDER BY p.created_at DESC
+        `;
+        const result = await pool.query(query);
+        return result.rows;
+    } catch(err){
+        console.error(err);
+        throw err;
     }
 }
 

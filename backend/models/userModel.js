@@ -1,10 +1,10 @@
 import pool from "../config/db.js";
 
-export async function insertUser(email, passwordHashed) {
+export async function insertUser(email, passwordHashed, name, username, bio) {
     try {
         const result = await pool.query(
-            "INSERT INTO users (email, password) VALUES($1, $2) RETURNING *",
-            [email, passwordHashed]
+            "INSERT INTO users (email, password, name, username, bio) VALUES($1, $2, $3, $4, $5) RETURNING *",
+            [email, passwordHashed, name, username, bio]
         );
         return result.rows[0];
     } catch (err) {
@@ -54,14 +54,16 @@ export async function deleteUserByEmail(email) {
     }
 }
 
-export async function updateUser(id,email,passwordHashed) {
+export async function updateUser(id, email, passwordHashed, name, username, bio) {
     try {
-        const result = await pool.query("UPDATE users SET email = $1, password = $2 WHERE id = $3 RETURNING *", [email,passwordHashed,id]);
-        const user = result.rows[0]
-        return user
+        const result = await pool.query(
+            "UPDATE users SET email = $1, password = $2, name = $3, username = $4, bio = $5 WHERE id = $6 RETURNING *", 
+            [email, passwordHashed, name, username, bio, id]
+        );
+        const user = result.rows[0];
+        return user;
     } catch (err) {
         console.error(err);
         throw err;
     }
-    
 }
