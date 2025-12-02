@@ -30,13 +30,19 @@ export async function unlikePost(req, res) {
 
 export async function addComment(req, res) {
   try {
+    console.log("SESSION USER:", req.session.user); // ← Verificar si hay sesión
+    console.log("Request params:", req.params);
+    console.log("Request body:", req.body);
+    
     const user_id = req.session.user.id;
     const { content } = req.body;
     const { id: post_id } = req.params;
+    
     const comment = await insertComment(user_id, post_id, content);
     res.json(comment);
   } catch (err) {
-    res.status(500).json({ error: "Error al agregar comentario" });
+    console.error("ERROR en addComment:", err); // ← Ver error específico
+    res.status(500).json({ error: "Error al agregar comentario", details: err.message });
   }
 }
 

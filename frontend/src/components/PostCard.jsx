@@ -21,7 +21,6 @@ const PostCard = ({
   const [newComment, setNewComment] = useState("");
   const [bump, setBump] = useState(false);
 
-  // Cargar comentarios cuando se muestren
   useEffect(() => {
     if (showComments && postId) {
       loadComments();
@@ -48,13 +47,16 @@ const PostCard = ({
     setTimeout(() => setBump(false), 300);
   };
 
-  const handleAddComment = async () => {
+  const handleAddComment = async (e) => {
+    if (e) e.preventDefault();
     if (!newComment.trim()) return;
+
+    console.log("postId value:", postId, "Type:", typeof postId);
 
     try {
       await addComment(postId, newComment);
       setNewComment("");
-      loadComments(); // Recargar comentarios
+      loadComments();
     } catch (error) {
       console.error("Error agregando comentario:", error);
     }
@@ -101,10 +103,8 @@ const PostCard = ({
           </Button>
         </div>
 
-        {/* SECCIÓN DE COMENTARIOS */}
         {showComments && (
           <div className="comments-section mt-3">
-            {/* Lista de comentarios */}
             {comments.map((comment) => (
               <div
                 key={comment.id}
@@ -115,7 +115,7 @@ const PostCard = ({
             ))}
 
             {/* Formulario para nuevo comentario */}
-            <div className="comment-form mt-3">
+            <form onSubmit={handleAddComment} className="comment-form mt-3">
               <textarea
                 className="form-control"
                 placeholder="Escribe un comentario..."
@@ -127,12 +127,12 @@ const PostCard = ({
                 variant="primary"
                 size="sm"
                 className="mt-2"
-                onClick={handleAddComment}
+                type="submit" // ← type="submit" importante
                 disabled={!newComment.trim()}
               >
                 Comentar
               </Button>
-            </div>
+            </form>
           </div>
         )}
       </Card.Body>

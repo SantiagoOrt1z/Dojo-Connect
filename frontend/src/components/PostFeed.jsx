@@ -36,6 +36,7 @@ const PostFeed = () => {
           initialLikes={parseInt(post.likes_count) || 0}
           commentsCount={parseInt(post.comments_count) || 0}
           avatar={post.avatar_url}
+          postId={post.id}
         />
       ))}
     </div>
