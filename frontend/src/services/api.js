@@ -37,3 +37,11 @@ export function deleteUser(){
 export function getPosts() {
   return API.get("/post/all");
 }
+
+export async function getComments(postId) {
+  return API.get(`/posts/${postId}/comments`);
+}
+
+export async function addComment(postId, content) {
+  return API.post(`/posts/${postId}/comments`, { content });
+}
