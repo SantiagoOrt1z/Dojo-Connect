@@ -45,3 +45,15 @@ export function getComments(postId) {
 export function addComment(postId, content) {
   return API.post(`/posts/${postId}/comments`, { content });
 }
+
+export function likePost(postId) {
+  return API.post(`/posts/${postId}/like`);
+}
+
+export function unlikePost(postId) {
+  return API.delete(`/posts/${postId}/like`);
+}
+
+export function createPost(content) {
+  return API.post("/post/add", { content });
+}

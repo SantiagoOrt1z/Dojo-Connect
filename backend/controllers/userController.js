@@ -10,7 +10,7 @@ export async function registerUser(req, res) {
         if(checkResult != false){
             res.status(500).json({message: "El usuario ya existe"})
         }else{
-        await createUser(email, password);
+        await createUser(email, password,name, username, bio);
         res.status(201).json({ message: "Usuario creado con éxito" });}
     } catch (err) {
         res.status(500).json({
@@ -66,12 +66,12 @@ export async function loginUser(req,res) {
 }
 
 export function getSessionUser(req, res) {
+  console.log("Session en getSessionUser:", req.session);
   if (req.session.user) {
     return res.status(200).json(req.session.user);
   }
   return res.status(401).json({ message: "No hay sesión activa" });
 }
-
 export function logoutUser(req, res) {
   req.session.destroy(() => {
     res.clearCookie("connect.sid");

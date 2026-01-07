@@ -3,7 +3,7 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { FaComment } from "react-icons/fa";
 import { GiPunch } from "react-icons/gi";
-import { getComments, addComment } from "../services/api";
+import { getComments, addComment, likePost, unlikePost } from "../services/api";
 import "./styles/PostCard.css";
 
 const PostCard = ({
@@ -20,6 +20,7 @@ const PostCard = ({
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [bump, setBump] = useState(false);
+  const [loadingLike, setLoadingLike] = useState(false);
 
   useEffect(() => {
     if (showComments && postId) {
@@ -36,22 +37,41 @@ const PostCard = ({
     }
   };
 
-  const handleLike = () => {
-    if (!liked) {
-      setLikes(likes + 1);
-    } else {
-      setLikes(likes - 1);
-    }
-    setLiked(!liked);
+  const handleLike = async () => {
+    if (loadingLike) return;
+
+    setLoadingLike(true);
     setBump(true);
-    setTimeout(() => setBump(false), 300);
+
+    try {
+      if (!liked) {
+        const response = await likePost(postId);
+        setLikes(response.data.likes || likes + 1);
+        setLiked(true);
+      } else {
+        // Quitar like
+        const response = await unlikePost(postId);
+        setLikes(response.data.likes || likes - 1);
+        setLiked(false);
+      }
+    } catch (error) {
+      console.error("Error en like:", error);
+      if (!liked) {
+        setLikes(likes - 1);
+        setLiked(false);
+      } else {
+        setLikes(likes + 1);
+        setLiked(true);
+      }
+    } finally {
+      setLoadingLike(false);
+      setTimeout(() => setBump(false), 300);
+    }
   };
 
   const handleAddComment = async (e) => {
     if (e) e.preventDefault();
     if (!newComment.trim()) return;
-
-    console.log("postId value:", postId, "Type:", typeof postId);
 
     try {
       await addComment(postId, newComment);
@@ -84,10 +104,14 @@ const PostCard = ({
           <Button
             variant={liked ? "primary" : "outline-primary"}
             size="sm"
-            className={`like-btn ${liked ? "liked" : ""}`}
+            className={`like-btn ${liked ? "liked" : ""} ${
+              loadingLike ? "loading" : ""
+            }`}
             onClick={handleLike}
+            disabled={loadingLike}
           >
-            <GiPunch className="like-icon" /> Oss
+            <GiPunch className="like-icon" />
+            {loadingLike ? "..." : "Oss"}
           </Button>
 
           <span className={`like-count ${bump ? "bump" : ""}`}>
@@ -114,7 +138,6 @@ const PostCard = ({
               </div>
             ))}
 
-            {/* Formulario para nuevo comentario */}
             <form onSubmit={handleAddComment} className="comment-form mt-3">
               <textarea
                 className="form-control"
@@ -127,7 +150,7 @@ const PostCard = ({
                 variant="primary"
                 size="sm"
                 className="mt-2"
-                type="submit" // ← type="submit" importante
+                type="submit"
                 disabled={!newComment.trim()}
               >
                 Comentar
