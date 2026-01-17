@@ -1,7 +1,7 @@
 import express  from "express";
 import cors from "cors"
 import env from "dotenv"
-import session from "express-session";
+import session, { MemoryStore } from "express-session";
 import userRoutes from "./routes/userRoutes.js"
 import postRoutes from "./routes/postRoutes.js"
 import postExtraRoutes from "./routes/postExtraRoutes.js";
@@ -15,6 +15,7 @@ const app = express()
 app.use(cors({
   origin: "http://localhost:5173", 
   credentials: true,
+   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 }))
 
 
@@ -23,12 +24,15 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    maxAge: 1000 * 60 * 120,
+    maxAge: 1000 * 60 * 60 * 2,
     httpOnly: true,
     sameSite: "lax",  
     secure: false     
-  }
+  },
+  store: new MemoryStore()
 }));
+
+
 
 
 app.use(express.json())

@@ -14,6 +14,15 @@ export  function register(email, password, name, username,bio) {
   return API.post("/user/register", {email,password,name,username,bio})
 }
 
+export function editInfoUser(email, password, name, username, bio) {
+  return API.put("/user/", { 
+    email, 
+    password: password || undefined, // Si está vacío, undefined
+    name, 
+    username, 
+    bio 
+  });}
+
 export function login(email,password){
   return API.post("/user/login",{email,password})
 }
@@ -24,10 +33,6 @@ export function logout(){
 
 export function me(){
   return API.get("/user/me")
-}
-
-export function editInfoUser(email,password){
-  return API.put("/user/",{email,password})
 }
 
 export function deleteUser(){

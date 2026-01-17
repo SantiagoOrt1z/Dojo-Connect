@@ -3,6 +3,7 @@ import { Route, Routes, Navigate, BrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout.jsx";
 import LoginForm from "./components/LoginForm.jsx";
 import RegisterForm from "./components/RegisterForm.jsx";
+import EditProfile from "./components/EditProfile.jsx"; // ← Importar nuevo componente
 
 function App() {
   const [isAuth, setIsAuth] = React.useState(false);
@@ -10,6 +11,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Ruta pública - Login */}
         <Route
           path="/login"
           element={
@@ -20,6 +22,20 @@ function App() {
             )
           }
         />
+
+        {/* Ruta pública - Registro */}
+        <Route
+          path="/register"
+          element={
+            isAuth ? (
+              <Navigate to="/" replace />
+            ) : (
+              <RegisterForm onSesionSuccess={() => setIsAuth(true)} />
+            )
+          }
+        />
+
+        {/* Ruta protegida - Layout principal */}
         <Route
           path="/"
           element={
@@ -30,13 +46,21 @@ function App() {
             )
           }
         />
+
+        {/* Ruta protegida - Editar perfil (NUEVA) */}
         <Route
-          path="/register"
+          path="/profile/edit"
+          element={isAuth ? <EditProfile /> : <Navigate to="/login" replace />}
+        />
+
+        {/* Ruta catch-all - Redirige a home si autenticado, sino a login */}
+        <Route
+          path="*"
           element={
             isAuth ? (
               <Navigate to="/" replace />
             ) : (
-              <RegisterForm onSesionSuccess={() => setIsAuth(true)} />
+              <Navigate to="/login" replace />
             )
           }
         />

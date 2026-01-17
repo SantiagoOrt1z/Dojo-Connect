@@ -13,13 +13,17 @@ export async function createUser(email, password, name, username, bio) {
 
 export async function updateDataUser(id, email, password, name, username, bio) {
     try {
+
+
         const currentUser = await getUserById(id);
+  
 
         let newEmail = email || currentUser.email;
         let newPassword = currentUser.password; 
         let newName = name || currentUser.name;
         let newUsername = username || currentUser.username;
-        let newBio = bio || currentUser.bio;
+        let newBio = bio ?? currentUser.bio; 
+ 
 
         if (password) {
             const isSamePassword = await bcrypt.compare(password, currentUser.password);
@@ -36,18 +40,24 @@ export async function updateDataUser(id, email, password, name, username, bio) {
 }
 export async function userCompare(email,password) {
     try{
-        const user = await getUserByEmail(email)
+        
+        
+        const user = await getUserByEmail(email);
+        
+        
         if(user){
-            const match = await bcrypt.compare(password, user.password)
-            if(!match){
-                return false
-            }else{
-                return true
-            }
-        }else{
-            return false
+            
+            
+            const match = await bcrypt.compare(password, user.password);
+            
+            
+            return match;
+        } else {
+            
+            return false;
         }
-    }catch(err){
-        console.error(err)
+    } catch(err) {
+        
+        throw err;
     }
 }

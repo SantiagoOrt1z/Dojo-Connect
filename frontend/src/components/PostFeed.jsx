@@ -34,7 +34,7 @@ const PostFeed = () => {
           content={post.content}
           imageUrl={post.post_image}
           initialLikes={parseInt(post.likes_count) || 0}
-          commentsCount={parseInt(post.comments_count) || 0}
+          initialCommentsCount={parseInt(post.comments_count) || 0}
           avatar={post.avatar_url}
           postId={post.id}
         />

@@ -62,7 +62,7 @@ function Header({ user, onLogout }) {
                 }
                 id="navbarScrollingDropdown"
               >
-                <NavDropdown.Item as={Link} to="/profile">
+                <NavDropdown.Item as={Link} to="/profile/edit">
                   Mi perfil
                 </NavDropdown.Item>
 

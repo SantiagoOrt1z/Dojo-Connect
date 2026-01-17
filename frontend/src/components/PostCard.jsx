@@ -11,6 +11,7 @@ const PostCard = ({
   content,
   imageUrl,
   initialLikes = 0,
+  initialCommentsCount = 0,
   avatar,
   postId,
 }) => {
@@ -18,9 +19,11 @@ const PostCard = ({
   const [likes, setLikes] = useState(initialLikes);
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState([]);
+  const [commentsCount, setCommentsCount] = useState(initialCommentsCount);
   const [newComment, setNewComment] = useState("");
   const [bump, setBump] = useState(false);
   const [loadingLike, setLoadingLike] = useState(false);
+  const [loadingComment, setLoadingComment] = useState(false);
 
   useEffect(() => {
     if (showComments && postId) {
@@ -32,6 +35,7 @@ const PostCard = ({
     try {
       const response = await getComments(postId);
       setComments(response.data);
+      setCommentsCount(response.data.length);
     } catch (error) {
       console.error("Error cargando comentarios:", error);
     }
@@ -44,25 +48,21 @@ const PostCard = ({
     setBump(true);
 
     try {
-      if (!liked) {
+      if (liked) {
+        // SI ya está liked → quitar like (unlike)
+        const response = await unlikePost(postId);
+        setLikes(response.data.likes || Math.max(0, likes - 1)); // No menor que 0
+        setLiked(false);
+      } else {
+        // NO está liked → dar like
         const response = await likePost(postId);
         setLikes(response.data.likes || likes + 1);
         setLiked(true);
-      } else {
-        // Quitar like
-        const response = await unlikePost(postId);
-        setLikes(response.data.likes || likes - 1);
-        setLiked(false);
       }
     } catch (error) {
       console.error("Error en like:", error);
-      if (!liked) {
-        setLikes(likes - 1);
-        setLiked(false);
-      } else {
-        setLikes(likes + 1);
-        setLiked(true);
-      }
+      // Revertir visualmente
+      setLiked(!liked);
     } finally {
       setLoadingLike(false);
       setTimeout(() => setBump(false), 300);
@@ -76,7 +76,7 @@ const PostCard = ({
     try {
       await addComment(postId, newComment);
       setNewComment("");
-      loadComments();
+      await loadComments();
     } catch (error) {
       console.error("Error agregando comentario:", error);
     }
@@ -123,7 +123,7 @@ const PostCard = ({
             size="sm"
             onClick={() => setShowComments(!showComments)}
           >
-            <FaComment /> Comentar ({comments.length})
+            <FaComment /> Comentar ({commentsCount})
           </Button>
         </div>
 

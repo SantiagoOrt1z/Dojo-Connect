@@ -22,15 +22,29 @@ export async function registerUser(req, res) {
 
 export async function editUser(req,res) {
     try{
-        const id = req.session.user.id
-        const { email, password, name, username, bio} = req.body
-       const result = await updateDataUser(id,email,password)
-       res.status(200).json(result)
-    }catch(err){
-        res.status(500).json({
-            error:"Error al editar el usuario",
-            details: err.message
-        })
+ 
+        const id = req.session.user.id;
+        const { email, password, name, username, bio } = req.body;
+        
+
+        
+        const result = await updateDataUser(id, email, password, name, username, bio);
+
+
+        req.session.user = {
+            ...req.session.user,
+            name: result.name,
+            username: result.username,
+            bio: result.bio,
+            email: result.email
+        };
+        
+  
+        
+        res.status(200).json(result);
+    } catch(err) {
+        console.error("Error en editUser:", err);
+        res.status(500).json({ error: "Error al editar usuario" });
     }
 }
 
@@ -50,18 +64,41 @@ export async function deleteUser(req,res) {
 
 export async function loginUser(req,res) {
     try{
-        const {email, password} = req.body
-        const result = await userCompare(email, password)
-        if(result){
-            const user = await getUserByEmail(email)
-            req.session.user = user
-            res.status(200).json({message: "Inicio de sesion exitoso"})
-        }else{
-            res.status(500).json({message: "Error al iniciar sesion"})
+        console.log("=== DEBUG loginUser ===");
+        console.log("Email recibido:", req.body.email);
+        
+        const {email, password} = req.body;
+        
+        if (!email || !password) {
+            console.log("❌ Faltan credenciales");
+            return res.status(400).json({message: "Email y password requeridos"});
         }
-    }catch(err){
-        console.error(err)
-        throw err
+        
+        const result = await userCompare(email, password);
+        console.log("Resultado userCompare:", result);
+        
+        if(result){
+            const user = await getUserByEmail(email);
+            console.log("Usuario encontrado:", user?.id, user?.email);
+            
+            req.session.user = user;
+            
+            // Guardar sesión explícitamente
+            req.session.save((err) => {
+                if (err) console.error("Error guardando sesión:", err);
+            });
+            
+            console.log("✅ Login exitoso. Session ID:", req.sessionID);
+            res.status(200).json({message: "Inicio de sesion exitoso"});
+            
+        } else {
+            console.log("❌ Credenciales incorrectas");
+            res.status(401).json({message: "Credenciales incorrectas"}); // ← 401, no 500
+        }
+        
+    } catch(err) {
+        console.error("❌ ERROR en loginUser:", err);
+        res.status(500).json({message: "Error en el servidor", error: err.message});
     }
 }
 
