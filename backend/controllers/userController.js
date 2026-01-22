@@ -21,15 +21,11 @@ export async function registerUser(req, res) {
 }
 
 export async function editUser(req,res) {
-    try{
- 
+    try{ 
         const id = req.session.user.id;
         const { email, password, name, username, bio } = req.body;
-        
-
-        
+               
         const result = await updateDataUser(id, email, password, name, username, bio);
-
 
         req.session.user = {
             ...req.session.user,
@@ -38,8 +34,6 @@ export async function editUser(req,res) {
             bio: result.bio,
             email: result.email
         };
-        
-  
         
         res.status(200).json(result);
     } catch(err) {
@@ -64,46 +58,37 @@ export async function deleteUser(req,res) {
 
 export async function loginUser(req,res) {
     try{
-        console.log("=== DEBUG loginUser ===");
-        console.log("Email recibido:", req.body.email);
-        
         const {email, password} = req.body;
         
-        if (!email || !password) {
-            console.log("❌ Faltan credenciales");
+        if (!email || !password) {           
             return res.status(400).json({message: "Email y password requeridos"});
         }
         
         const result = await userCompare(email, password);
-        console.log("Resultado userCompare:", result);
         
         if(result){
             const user = await getUserByEmail(email);
-            console.log("Usuario encontrado:", user?.id, user?.email);
             
             req.session.user = user;
             
-            // Guardar sesión explícitamente
             req.session.save((err) => {
                 if (err) console.error("Error guardando sesión:", err);
             });
             
-            console.log("✅ Login exitoso. Session ID:", req.sessionID);
             res.status(200).json({message: "Inicio de sesion exitoso"});
             
         } else {
-            console.log("❌ Credenciales incorrectas");
-            res.status(401).json({message: "Credenciales incorrectas"}); // ← 401, no 500
+            console.log("Credenciales incorrectas");
+            res.status(401).json({message: "Credenciales incorrectas"});
         }
         
     } catch(err) {
-        console.error("❌ ERROR en loginUser:", err);
+        console.error("ERROR en loginUser:", err);
         res.status(500).json({message: "Error en el servidor", error: err.message});
     }
 }
 
 export function getSessionUser(req, res) {
-  console.log("Session en getSessionUser:", req.session);
   if (req.session.user) {
     return res.status(200).json(req.session.user);
   }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Form, Button, Card, Container, Image, Alert } from "react-bootstrap";
 import { me, editInfoUser } from "../services/api";
 import { useNavigate } from "react-router-dom";
-import "./styles/EditProfile.css"; // ← Opcional, si querés estilos
+import "./styles/EditProfile.css";
 
 const EditProfile = () => {
   const navigate = useNavigate();
@@ -61,7 +61,6 @@ const EditProfile = () => {
     setError("");
     setSuccess("");
 
-    // Validaciones estrictas
     if (!user.name.trim()) {
       setError("El nombre es requerido");
       setSaving(false);
@@ -74,7 +73,6 @@ const EditProfile = () => {
       return;
     }
 
-    // ✅ Validar que email sea string (CRÍTICO)
     if (typeof user.email !== "string") {
       setError("Email inválido");
       setSaving(false);
@@ -84,32 +82,29 @@ const EditProfile = () => {
     try {
       console.log("Enviando datos de perfil...");
 
-      // ✅ Enviar parámetros INDIVIDUALES, no objeto
       await editInfoUser(
-        user.email, // string
-        user.password || "", // string vacío si no hay password
-        user.name, // string
-        user.username, // string
-        user.bio // string
+        user.email,
+        user.password || "",
+        user.name,
+        user.username,
+        user.bio,
       );
 
       setSuccess("¡Perfil actualizado correctamente!");
 
-      // ✅ Redirección más suave
       setTimeout(() => {
         navigate("/", { replace: true });
       }, 1500);
     } catch (error) {
       console.error("Error actualizando perfil:", error);
 
-      // Manejo de errores específicos
       if (error.response?.status === 401) {
         setError("Sesión expirada. Por favor, volvé a iniciar sesión.");
       } else if (error.response?.status === 400) {
         setError("Datos inválidos: " + (error.response.data.message || ""));
       } else {
         setError(
-          error.response?.data?.message || "Error al actualizar el perfil"
+          error.response?.data?.message || "Error al actualizar el perfil",
         );
       }
     } finally {
@@ -307,7 +302,7 @@ const EditProfile = () => {
                       Guardando...
                     </>
                   ) : (
-                    "💾 Guardar cambios"
+                    "Guardar cambios"
                   )}
                 </Button>
               </div>
@@ -318,7 +313,7 @@ const EditProfile = () => {
 
       <Card className="mt-3 shadow-sm border-0">
         <Card.Body className="p-3">
-          <h6 className="mb-2">ℹ️ Información adicional</h6>
+          <h6 className="mb-2">ℹInformación adicional</h6>
           <ul className="list-unstyled text-muted small mb-0">
             <li>• Los campos con * son obligatorios</li>
             <li>• Los cambios se reflejarán inmediatamente</li>

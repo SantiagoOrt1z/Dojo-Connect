@@ -7,7 +7,6 @@ import { me, getPosts, getFollowers, getFollowing } from "../services/api";
 import "./styles/Layout.css";
 import CreatePost from "./CreatePost.jsx";
 
-// Crear un contexto para compartir estado
 export const UserContext = React.createContext();
 
 const Layout = ({ onLogout }) => {
@@ -58,7 +57,6 @@ const Layout = ({ onLogout }) => {
     fetchUserData();
   }, []);
 
-  // Función para actualizar contadores después de seguir/dejar de seguir
   const updateFollowCounters = async (
     incrementFollowers = 0,
     incrementFollowing = 0,
@@ -76,9 +74,6 @@ const Layout = ({ onLogout }) => {
         prevUser.following_count + incrementFollowing,
       ),
     }));
-
-    // Opcional: Refrescar datos desde la API para asegurar exactitud
-    // setTimeout(() => fetchUserData(), 500);
   };
 
   if (loading) {

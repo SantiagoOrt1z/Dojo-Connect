@@ -3,7 +3,6 @@ import {
   unfollowUser,
   getFollowers,
   getFollowing,
-  checkIfFollowing
 } from "../models/userFollowModel.js";
 
 export async function follow(req, res) {
@@ -49,20 +48,5 @@ export async function following(req, res) {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error al obtener seguidos" });
-  }
-}
-
-export async function checkFollow(req, res) {
-  try {
-    const followerId = req.session.user.id;
-    const followedId = req.params.userId;
-    
-    // Necesitarías crear esta función en userFollowModel.js
-    const isFollowing = await checkIfFollowing(followerId, followedId);
-    
-    res.json({ isFollowing });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error al verificar follow" });
   }
 }

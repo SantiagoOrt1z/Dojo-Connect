@@ -1,11 +1,6 @@
-// src/components/FollowButton.jsx - VERSIÓN CORREGIDA
 import React, { useState, useEffect, useContext } from "react";
 import { Button } from "react-bootstrap";
-import {
-  followUser,
-  unfollowUser,
-  getFollowing, // ¡USA ESTE!
-} from "../services/api.js";
+import { followUser, unfollowUser, getFollowing } from "../services/api.js";
 import { FaUserPlus, FaUserCheck } from "react-icons/fa";
 import { UserContext } from "./Layout.jsx";
 
@@ -15,7 +10,6 @@ const FollowButton = ({ targetUserId, currentUserId, small = false }) => {
   const [actionLoading, setActionLoading] = useState(false);
   const { updateFollowCounters } = useContext(UserContext);
 
-  // Verificar estado inicial USANDO getFollowing
   useEffect(() => {
     const checkStatus = async () => {
       if (!currentUserId || !targetUserId || currentUserId === targetUserId) {
@@ -25,10 +19,8 @@ const FollowButton = ({ targetUserId, currentUserId, small = false }) => {
       }
 
       try {
-        console.log("📡 Llamando a getFollowing() para verificar...");
         const response = await getFollowing();
 
-        // Buscar si targetUserId está en la lista de seguidos
         const followingList = response.data || [];
         const isUserFollowed = followingList.some(
           (user) =>
@@ -36,7 +28,6 @@ const FollowButton = ({ targetUserId, currentUserId, small = false }) => {
             user.userId === Number(targetUserId),
         );
 
-        console.log("✅ Usuario seguido?", isUserFollowed);
         setIsFollowing(isUserFollowed);
       } catch (error) {
         console.error("Error obteniendo lista de seguidos:", error);
@@ -68,7 +59,6 @@ const FollowButton = ({ targetUserId, currentUserId, small = false }) => {
         }
       }
     } catch (error) {
-      console.error("Error en follow/unfollow:", error);
       alert(error.response?.data?.error || "Error al actualizar seguimiento");
     } finally {
       setActionLoading(false);

@@ -65,19 +65,16 @@ const PostCard = ({
 
     try {
       if (liked) {
-        // SI ya está liked → quitar like (unlike)
         const response = await unlikePost(postId);
-        setLikes(response.data.likes || Math.max(0, likes - 1)); // No menor que 0
+        setLikes(response.data.likes || Math.max(0, likes - 1));
         setLiked(false);
       } else {
-        // NO está liked → dar like
         const response = await likePost(postId);
         setLikes(response.data.likes || likes + 1);
         setLiked(true);
       }
     } catch (error) {
       console.error("Error en like:", error);
-      // Revertir visualmente
       setLiked(!liked);
     } finally {
       setLoadingLike(false);

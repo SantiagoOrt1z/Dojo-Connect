@@ -4,29 +4,27 @@ import Layout from "./components/Layout.jsx";
 import LoginForm from "./components/LoginForm.jsx";
 import RegisterForm from "./components/RegisterForm.jsx";
 import EditProfile from "./components/EditProfile.jsx";
-import { me } from "./services/api"; // ← Importamos para verificar sesión
+import { me } from "./services/api";
 
 function App() {
-  const [isAuth, setIsAuth] = useState(null); // ← null = "cargando/verificando"
-  const [loading, setLoading] = useState(true); // ← Estado de carga
-
-  // Verificar si hay sesión activa al cargar la aplicación
+  const [isAuth, setIsAuth] = useState(null);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     const checkSession = async () => {
       try {
-        const response = await me(); // Llama a /user/me
+        const response = await me();
         console.log("✅ Sesión activa encontrada para:", response.data.email);
         setIsAuth(true);
       } catch (error) {
         console.log("🔐 No hay sesión activa, redirigiendo a login");
         setIsAuth(false);
       } finally {
-        setLoading(false); // Terminó la verificación
+        setLoading(false);
       }
     };
 
     checkSession();
-  }, []); // Solo se ejecuta al montar el componente
+  }, []);
 
   const handleLoginSuccess = () => {
     setIsAuth(true);
@@ -36,7 +34,6 @@ function App() {
     setIsAuth(false);
   };
 
-  // Mientras verifica, muestra un loading
   if (loading) {
     return (
       <div
@@ -67,7 +64,6 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Ruta pública - Login */}
         <Route
           path="/login"
           element={
@@ -79,7 +75,6 @@ function App() {
           }
         />
 
-        {/* Ruta pública - Registro */}
         <Route
           path="/register"
           element={
@@ -91,7 +86,6 @@ function App() {
           }
         />
 
-        {/* Ruta protegida - Layout principal */}
         <Route
           path="/"
           element={
@@ -103,13 +97,11 @@ function App() {
           }
         />
 
-        {/* Ruta protegida - Editar perfil */}
         <Route
           path="/profile/edit"
           element={isAuth ? <EditProfile /> : <Navigate to="/login" replace />}
         />
 
-        {/* Ruta catch-all */}
         <Route
           path="*"
           element={<Navigate to={isAuth ? "/" : "/login"} replace />}

@@ -8,8 +8,6 @@ const API = axios.create({
   },
 })
 
-    //USER
-
 export  function register(email, password, name, username,bio) {
   return API.post("/user/register", {email,password,name,username,bio})
 }
@@ -17,7 +15,7 @@ export  function register(email, password, name, username,bio) {
 export function editInfoUser(email, password, name, username, bio) {
   return API.put("/user/", { 
     email, 
-    password: password || undefined, // Si está vacío, undefined
+    password: password || undefined,
     name, 
     username, 
     bio 

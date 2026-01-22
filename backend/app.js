@@ -3,7 +3,6 @@ import cors from "cors"
 import env from "dotenv"
 import session,{MemoryStore} from "express-session";
 import pgSession from "connect-pg-simple"
-import pool from "./config/db.js";
 import userRoutes from "./routes/userRoutes.js"
 import postRoutes from "./routes/postRoutes.js"
 import postExtraRoutes from "./routes/postExtraRoutes.js";
@@ -24,16 +23,16 @@ app.use(cors({
 
 app.use(session({
   secret: process.env.SESSION_SECRET || "test-secret-123",
-  resave: true,  // ← Cambiar a true temporalmente
-  saveUninitialized: true,  // ← Cambiar a true temporalmente  
+  resave: true,
+  saveUninitialized: true,
   cookie: {
-    maxAge: 1000 * 60 * 60 * 2, // 2 horas
+    maxAge: 1000 * 60 * 60 * 2,
     httpOnly: true,
     secure: false,
     sameSite: "lax"
   },
   store: new MemoryStore({
-    checkPeriod: 86400 // 24 horas
+    checkPeriod: 86400
   })
 }));
 

@@ -1,4 +1,3 @@
-// CreatePost.jsx - VERSIÓN SEGURA
 import React, { useState } from "react";
 import { Button, Form, Card } from "react-bootstrap";
 import { createPost } from "../services/api";
