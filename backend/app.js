@@ -1,7 +1,9 @@
 import express  from "express";
 import cors from "cors"
 import env from "dotenv"
-import session, { MemoryStore } from "express-session";
+import session,{MemoryStore} from "express-session";
+import pgSession from "connect-pg-simple"
+import pool from "./config/db.js";
 import userRoutes from "./routes/userRoutes.js"
 import postRoutes from "./routes/postRoutes.js"
 import postExtraRoutes from "./routes/postExtraRoutes.js";
@@ -9,6 +11,7 @@ import userFollowRoutes from "./routes/userFollowRoutes.js"
 
 env.config()
 
+const PostgresSessionStore = pgSession(session)
 
 const app = express()
 
@@ -20,20 +23,19 @@ app.use(cors({
 
 
 app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
+  secret: process.env.SESSION_SECRET || "test-secret-123",
+  resave: true,  // ← Cambiar a true temporalmente
+  saveUninitialized: true,  // ← Cambiar a true temporalmente  
   cookie: {
-    maxAge: 1000 * 60 * 60 * 2,
+    maxAge: 1000 * 60 * 60 * 2, // 2 horas
     httpOnly: true,
-    sameSite: "lax",  
-    secure: false     
+    secure: false,
+    sameSite: "lax"
   },
-  store: new MemoryStore()
+  store: new MemoryStore({
+    checkPeriod: 86400 // 24 horas
+  })
 }));
-
-
-
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
@@ -41,6 +43,6 @@ app.use(express.urlencoded({extended:true}))
 app.use("/user",userRoutes)
 app.use("/post",postRoutes)
 app.use("/posts", postExtraRoutes);
-app.use("/follows", userFollowRoutes)
+app.use("/user", userFollowRoutes)
 
 export default app

@@ -62,3 +62,23 @@ export function unlikePost(postId) {
 export function createPost(content) {
   return API.post("/post/add", { content });
 }
+
+export function followUser(userId) {
+  return API.post(`/user/${userId}/follow`);
+}
+
+export function unfollowUser(userId) {
+  return API.delete(`/user/${userId}/follow`);
+}
+
+export function checkFollowStatus(userId) {
+  return API.get(`/user/${userId}/follow-status`);
+}
+
+export function getFollowers() {
+  return API.get("/user/followers");
+}
+
+export function getFollowing() {
+  return API.get("/user/following");
+}

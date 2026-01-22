@@ -42,3 +42,13 @@ export async function getFollowing(userId) {
   const result = await pool.query(query, [userId]);
   return result.rows;
 }
+
+export async function checkIfFollowing(followerId, followedId) {
+  const query = `
+    SELECT 1 FROM user_follows 
+    WHERE follower_id = $1 AND followed_id = $2
+    LIMIT 1;
+  `;
+  const result = await pool.query(query, [followerId, followedId]);
+  return result.rows.length > 0;
+}

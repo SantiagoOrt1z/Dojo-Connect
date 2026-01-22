@@ -1,12 +1,68 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Route, Routes, Navigate, BrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout.jsx";
 import LoginForm from "./components/LoginForm.jsx";
 import RegisterForm from "./components/RegisterForm.jsx";
-import EditProfile from "./components/EditProfile.jsx"; // ← Importar nuevo componente
+import EditProfile from "./components/EditProfile.jsx";
+import { me } from "./services/api"; // ← Importamos para verificar sesión
 
 function App() {
-  const [isAuth, setIsAuth] = React.useState(false);
+  const [isAuth, setIsAuth] = useState(null); // ← null = "cargando/verificando"
+  const [loading, setLoading] = useState(true); // ← Estado de carga
+
+  // Verificar si hay sesión activa al cargar la aplicación
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const response = await me(); // Llama a /user/me
+        console.log("✅ Sesión activa encontrada para:", response.data.email);
+        setIsAuth(true);
+      } catch (error) {
+        console.log("🔐 No hay sesión activa, redirigiendo a login");
+        setIsAuth(false);
+      } finally {
+        setLoading(false); // Terminó la verificación
+      }
+    };
+
+    checkSession();
+  }, []); // Solo se ejecuta al montar el componente
+
+  const handleLoginSuccess = () => {
+    setIsAuth(true);
+  };
+
+  const handleLogout = () => {
+    setIsAuth(false);
+  };
+
+  // Mientras verifica, muestra un loading
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          background: "linear-gradient(135deg, #1e1e2f, #343454)",
+          color: "white",
+        }}
+      >
+        <div className="text-center">
+          <div
+            className="spinner-border"
+            role="status"
+            style={{ width: "3rem", height: "3rem" }}
+          >
+            <span className="visually-hidden">Cargando...</span>
+          </div>
+          <h4 className="mt-3">Dojo Connect</h4>
+          <p>Verificando sesión...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <BrowserRouter>
@@ -18,7 +74,7 @@ function App() {
             isAuth ? (
               <Navigate to="/" replace />
             ) : (
-              <LoginForm onSesionSuccess={() => setIsAuth(true)} />
+              <LoginForm onSesionSuccess={handleLoginSuccess} />
             )
           }
         />
@@ -30,7 +86,7 @@ function App() {
             isAuth ? (
               <Navigate to="/" replace />
             ) : (
-              <RegisterForm onSesionSuccess={() => setIsAuth(true)} />
+              <RegisterForm onSesionSuccess={handleLoginSuccess} />
             )
           }
         />
@@ -40,29 +96,23 @@ function App() {
           path="/"
           element={
             isAuth ? (
-              <Layout onLogout={() => setIsAuth(false)} />
+              <Layout onLogout={handleLogout} />
             ) : (
               <Navigate to="/login" replace />
             )
           }
         />
 
-        {/* Ruta protegida - Editar perfil (NUEVA) */}
+        {/* Ruta protegida - Editar perfil */}
         <Route
           path="/profile/edit"
           element={isAuth ? <EditProfile /> : <Navigate to="/login" replace />}
         />
 
-        {/* Ruta catch-all - Redirige a home si autenticado, sino a login */}
+        {/* Ruta catch-all */}
         <Route
           path="*"
-          element={
-            isAuth ? (
-              <Navigate to="/" replace />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
+          element={<Navigate to={isAuth ? "/" : "/login"} replace />}
         />
       </Routes>
     </BrowserRouter>

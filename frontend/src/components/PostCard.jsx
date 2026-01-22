@@ -5,6 +5,8 @@ import { FaComment } from "react-icons/fa";
 import { GiPunch } from "react-icons/gi";
 import { getComments, addComment, likePost, unlikePost } from "../services/api";
 import "./styles/PostCard.css";
+import FollowButton from "./FollowButton.jsx";
+import { me } from "../services/api.js";
 
 const PostCard = ({
   user,
@@ -14,6 +16,7 @@ const PostCard = ({
   initialCommentsCount = 0,
   avatar,
   postId,
+  postUserId,
 }) => {
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(initialLikes);
@@ -23,7 +26,20 @@ const PostCard = ({
   const [newComment, setNewComment] = useState("");
   const [bump, setBump] = useState(false);
   const [loadingLike, setLoadingLike] = useState(false);
-  const [loadingComment, setLoadingComment] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const response = await me();
+        setCurrentUser(response.data);
+      } catch (error) {
+        console.error("Error obteniendo usuario actual:", error);
+      }
+    };
+
+    fetchCurrentUser();
+  }, []);
 
   useEffect(() => {
     if (showComments && postId) {
@@ -84,15 +100,26 @@ const PostCard = ({
 
   return (
     <Card className="mb-3 shadow-sm post-card">
-      <Card.Header className="d-flex align-items-center">
-        <img
-          src={avatar || "dojo-connect.png"}
-          alt="avatar"
-          className="rounded-circle me-2"
-          height="40"
-          width="40"
+      <Card.Header className="d-flex align-items-center justify-content-between">
+        <div className="d-flex align-items-center">
+          <img
+            src={avatar || "dojo-connect.png"}
+            alt="avatar"
+            className="rounded-circle me-2"
+            height="40"
+            width="40"
+          />
+          <div>
+            <strong>{user}</strong>
+            <div className="small text-muted">@{postUserId}</div>
+          </div>
+        </div>
+
+        <FollowButton
+          targetUserId={postUserId}
+          currentUserId={currentUser?.id}
+          small={true}
         />
-        <strong>{user}</strong>
       </Card.Header>
 
       {imageUrl && <Card.Img variant="top" src={imageUrl} />}

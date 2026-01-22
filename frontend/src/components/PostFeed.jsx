@@ -37,6 +37,7 @@ const PostFeed = () => {
           initialCommentsCount={parseInt(post.comments_count) || 0}
           avatar={post.avatar_url}
           postId={post.id}
+          postUserId={post.user_id}
         />
       ))}
     </div>
